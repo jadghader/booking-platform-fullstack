@@ -1,0 +1,38 @@
+{
+  "compilerOptions": {
+    "target": "esnext", // Updated to esnext for better compatibility with modern React features
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "types": [
+      "react",
+      "react-dom",
+      "react-router-dom",
+      "react-redux"
+    ],
+    "typeRoots": [
+      "./node_modules/@types",
+      "./types"
+    ],
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "skipDefaultLibCheck": true, // Added to skip type checking of declaration files in node_modules
+    "strictFunctionTypes": false // If you run into issues with function types
+  },
+  "include": [
+    "src"
+  ]
+}

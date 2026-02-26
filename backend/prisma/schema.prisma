@@ -1,0 +1,116 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  user_id               Int           @id @default(autoincrement()) @map("user_id")
+  username              String        @unique
+  password              String
+  bio                   String?
+  role                  UserRole
+  location              String?
+  phone_number          String?       @unique
+  email                 String?       @unique
+  profile_picture       String?
+  emailValidate         Boolean
+  phoneValidate         Boolean
+  phoneVerificationCode String?
+  passwordResetCode     String?
+  emailVerificationCode String?
+  last_login_at         DateTime?     @map("last_login_at")
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime?     @default(now()) @updatedAt
+  consumerReviews       Review?       @relation("ConsumerReviews")
+  providerReviews       Review?       @relation("ProviderReviews")
+  services              Service[]     @relation("user_services")
+  subscriptions         Subscription?
+  bookingTimes          BookingTime[]
+  consumerBookings      Booking[]     @relation("ConsumerRelation")
+  providerBookings      Booking[]     @relation("ProviderRelation")
+}
+
+model Service {
+  service_id   Int           @id @default(autoincrement()) @map("service_id")
+  user_id      Int
+  category     String
+  title        String
+  description  String?
+  price        Float?
+  bookingTimes BookingTime[] // Change to BookingTime[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime?     @default(now()) @updatedAt
+  bookings     Booking[] // Define one-to-many relationship
+  reviews      Review?
+  user         User          @relation("user_services", fields: [user_id], references: [user_id])
+}
+
+model BookingTime {
+  bookingTime_id Int       @id @default(autoincrement()) @map("bookingTime_id")
+  service_id     Int
+  start_date     String
+  end_date       String
+  start_time     String
+  end_time       String
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime? @default(now()) @updatedAt
+
+  service     Service   @relation(fields: [service_id], references: [service_id])
+  bookings    Booking[]
+  User        User?     @relation(fields: [userUser_id], references: [user_id])
+  userUser_id Int?
+
+  @@unique([service_id, start_time, end_time], name: "unique_booking_time")
+}
+
+model Review {
+  review_id        Int       @id @default(autoincrement()) @map("review_id")
+  consumer_id      Int       @unique
+  provider_id      Int       @unique
+  service_id       Int       @unique
+  rating           Int
+  review_text      String?
+  visible_to_admin Boolean
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime? @default(now()) @updatedAt
+  consumer         User      @relation("ConsumerReviews", fields: [consumer_id], references: [user_id])
+  provider         User      @relation("ProviderReviews", fields: [provider_id], references: [user_id])
+  service          Service   @relation(fields: [service_id], references: [service_id])
+}
+
+model Subscription {
+  subscription_id Int       @id @default(autoincrement()) @map("subscription_id")
+  provider_id     Int       @unique
+  expiry_date     DateTime
+  currency        String
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime? @default(now()) @updatedAt
+  provider        User      @relation(fields: [provider_id], references: [user_id])
+}
+
+model Booking {
+  booking_id     Int       @id @default(autoincrement()) @map("booking_id")
+  consumer_id    Int
+  provider_id    Int // Add this field to reference the provider
+  bookingTime_id Int
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime? @default(now()) @updatedAt
+  bookedDate     String // Add this field to store the booked date
+  bookedTime     String // Add this field to store the booked time
+
+  consumer          User        @relation("ConsumerRelation", fields: [consumer_id], references: [user_id])
+  provider          User        @relation("ProviderRelation", fields: [provider_id], references: [user_id])
+  bookingTime       BookingTime @relation(fields: [bookingTime_id], references: [bookingTime_id])
+  Service           Service?    @relation(fields: [serviceService_id], references: [service_id])
+  serviceService_id Int?
+}
+
+enum UserRole {
+  admin
+  provider
+  consumer
+}

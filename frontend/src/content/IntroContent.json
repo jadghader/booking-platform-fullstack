@@ -1,0 +1,16 @@
+{
+  "title": "Welcome to Book My Service – Your Gateway to Effortless Booking!",
+  "text": "At Book My Service, we understand the value of your time and the importance of hassle-free service booking. Our platform is your go-to destination for streamlined and convenient booking experiences. Say goodbye to complexities and delays – with just a few clicks, you can book the services you need, when you need them.",
+  "button": [
+    {
+      "title": "Explore",
+      "onClick": "/services"
+    },
+    {
+      "title": "Learn more",
+      "color": "#fff",
+      "onClick": "scrollTo",
+      "scrollId": "learnMoreSection" 
+    }
+  ]
+}
