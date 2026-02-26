@@ -52,10 +52,7 @@ const EmailVerification: React.FC = ({ t }: Props) => {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       try {
-        const response = await axios.post(
-          "/auth/email-verify",
-          values
-        );
+        await axios.post("/auth/email-verify", values);
 
         // Handle the response as needed
 

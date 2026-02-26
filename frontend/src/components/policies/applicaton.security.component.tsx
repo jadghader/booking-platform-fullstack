@@ -19,7 +19,7 @@ interface Props {
   t: any;
 }
 
-const ApplicationSecurityPage: React.FC = ({ t }: any) => {
+const ApplicationSecurityPage: React.FC<Props> = ({ t }) => {
   return (
     <>
       <Header />

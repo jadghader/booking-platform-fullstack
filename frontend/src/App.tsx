@@ -9,7 +9,7 @@ import {
   selectCurrentToken,
   setCredentials,
 } from "./auth/authSlice";
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 
 export const theme = createTheme({
   typography: {
@@ -21,14 +21,11 @@ export const App = () => {
   const dispatch = useDispatch();
   const authToken = useSelector(selectCurrentToken);
 
-  const refreshToken = async () => {
+  const refreshToken = useCallback(async () => {
     try {
-      const response = await axios.get(
-        "/auth/refresh",
-        {
-          withCredentials: true,
-        }
-      );
+      const response = await axios.get("/auth/refresh", {
+        withCredentials: true,
+      });
       // If a new access token is received, update the Redux store
       if (response.data.accessToken) {
         dispatch(setCredentials({ token: response.data.accessToken }));
@@ -38,12 +35,12 @@ export const App = () => {
       console.error("Error refreshing token:", error);
       dispatch(clearUser());
     }
-  };
+  }, [dispatch]);
 
   useEffect(() => {
     const verifyUser = async () => {
       try {
-        refreshToken();
+        await refreshToken();
       } catch (error) {
         // If the request fails, log out the user
         console.error("Error verifying user:", error);
@@ -63,7 +60,7 @@ export const App = () => {
       // Clear the interval when the component is unmounted
       return () => clearInterval(intervalId);
     }
-  }, [authToken, dispatch]);
+  }, [authToken, dispatch, refreshToken]);
 
   return (
     <ThemeProvider theme={theme}>

@@ -1,13 +1,7 @@
 import { Button } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { StyledButton } from "./button.styled";
-import {
-  blue1,
-  greenColor,
-  primaryColor,
-  textColor,
-  white,
-} from "../../assets/globals/global-constants";
+import { primaryColor, white } from "../../assets/globals/global-constants";
 import {
   IButtonProps,
   ISubmitButtonProps,

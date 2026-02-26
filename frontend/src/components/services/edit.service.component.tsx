@@ -126,7 +126,7 @@ const EditServiceComponent: React.FC = ({ t }: Props) => {
         };
       });
 
-      const response = await axios.put(
+      await axios.put(
         `/service/edit/${serviceId}`,
         {
           category: formik.values.category,

@@ -95,7 +95,7 @@ const AddServiceComponent: React.FC = ({ t }: Props) => {
         };
       });
 
-      const response = await axios.post(
+      await axios.post(
         "/service/create",
         {
           category: formik.values.category,
